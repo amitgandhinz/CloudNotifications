@@ -1,4 +1,4 @@
-Cloud Notifications is a Notifications as a Service offering built on top of Open Stack's Marconi Project.
+**Cloud Notifications is a Notifications as a Service offering built on top of Open Stack's Marconi Project.**
 
 The concept is simple:
 
@@ -8,3 +8,6 @@ The concept is simple:
 - Users will (be) subscribed to queue's that they will be interested in
 - Subscribers/Workers will be constantly running, listening to each queue for messages.  
 - Users subscribed to that queue will be notified based on their preferences when a message appears.
+
+
+Note : This is a hack day project, and is very much a proof of concept only.
