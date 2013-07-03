@@ -14,8 +14,10 @@ class NotifyResource:
 
 	def on_get(self, req, resp, queue_name):
 		"""GETs a list of notifications from this queue"""
-		queue_uri = CLOUD_QUEUING_URI + 'queues/' + queue_name + QUEUE_SUFFIX + '/messages?echo=true'
-		queue_headers = {"X-Auth-Token" : AUTH_TOKEN, "Content-Type" : "application/json; charset=utf-8", "Client-ID" : "CloudNotifications"}
+		token = req.get_header('X-Auth-Token')
+		
+		queue_uri = CLOUD_QUEUING_URI + 'queues/' + queue_name + '/messages?echo=true'
+		queue_headers = {"X-Auth-Token" : token, "Content-Type" : "application/json; charset=utf-8", "Client-ID" : "CloudNotificationsPublisher"}
 		
 		r = requests.get(queue_uri, headers=queue_headers)
 
@@ -25,10 +27,12 @@ class NotifyResource:
 	def on_post(self, req, resp, queue_name):
 		"""POSTs a new notification to the queue"""
 
+		token = req.get_header('X-Auth-Token')
+
 		# Lets create the queue if it doesnt exist (this should happen somewhere else)
-		queue_uri = CLOUD_QUEUING_URI + 'queues/' + queue_name + QUEUE_SUFFIX
+		queue_uri = CLOUD_QUEUING_URI + 'queues/' + queue_name 
 		queue_data = {"metadata": "Notifications Queue"}
-		queue_headers = {"X-Auth-Token" : AUTH_TOKEN, "Content-Type" : "application/json; charset=utf-8"}
+		queue_headers = {"X-Auth-Token" : token, "Content-Type" : "application/json; charset=utf-8"}
 		
 		r = requests.put(queue_uri, data=json.dumps(queue_data), headers=queue_headers)
 
@@ -41,9 +45,9 @@ class NotifyResource:
 			
 
 		# Lets broadcast the notification to the Cloud Queuing API
-		queue_uri = CLOUD_QUEUING_URI + 'queues/' + queue_name + QUEUE_SUFFIX + '/messages'
+		queue_uri = CLOUD_QUEUING_URI + 'queues/' + queue_name  + '/messages'
 		queue_data = [{"ttl": 300,"body": notification_body}]
-		queue_headers = {"X-Auth-Token" : AUTH_TOKEN, "Content-Type" : "application/json; charset=utf-8", "Client-ID" : "CloudNotifications"}
+		queue_headers = {"X-Auth-Token" : token, "Content-Type" : "application/json; charset=utf-8", "Client-ID" : "CloudNotificationsPublisher"}
 
 		r = requests.post(queue_uri, data=json.dumps(queue_data), headers=queue_headers)
 
@@ -118,9 +122,7 @@ subscribers = SubscriberResource()
 users = UserResource()
 
 # hardcoded variables for now - these should drive from elsewhere
-AUTH_TOKEN = ''
 CLOUD_QUEUING_URI = 'http://preview.queue.api.rackspacecloud.com/v1/'
-QUEUE_SUFFIX = ''
 
 
 
