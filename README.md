@@ -1,8 +1,9 @@
+#Cloud Notifications
 **Cloud Notifications is a Notifications as a Service offering built on top of Open Stack's Marconi Project.**
 
 The concept is simple:
 
-- Publisher (the application/website) wil publish() messages on to a specific queue
+- Publisher (the application/website) will publish() messages on to a specific queue
 - The application will be responsible for advertising the queue's to the public
 
 - Subscribers will subscribe to queue's that they will be interested in (topics)
@@ -19,13 +20,23 @@ Note : This is a hack day project, and is very much a proof of concept only.
 *Execution*
 To run this locally: >gunicorn notify:app
 
-*API*
+#API
 
 Subscriber Actions
 
-    PUT /v1/{topic}/subscription # subscribe to a topic, returning messages (simulates push)
-    DELETE /v1/{topic}/subscription # unsubscribe from a topic
+    PUT /v1/topics/{topic}/subscribers/{subscriber_name} # subscribe to a topic (may require confirmation)
+    DELETE /v1/topics/{topic}/subscribers/{subscriber_name} # unsubscribe from a topic
     
 Publisher Actions
 
-    POST /v1/{topic}/messages # publish messages to the topic
+    GET /v1/topics # return a list of topics
+    PUT /v1/topics/{topic} # create a topic to publish to
+    DELETE /v1/topics/{topic} # delete a topic
+    POST /v1/topics/{topic}/messages # publish messages to the topic
+    
+    GET /v1/{topic}/subscribers # lists subscribers
+    PATCH /v1/{topic}/subscribers/{subscriber_name} # confirms a subscriber
+    DELETE /v1/{topic}/subscribers/{subscriber_name} # removes a subscriber
+
+
+Currently we do not support attribute based subscriptions.
