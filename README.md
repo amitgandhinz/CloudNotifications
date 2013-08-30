@@ -18,7 +18,7 @@ Note : This is a hack day project, and is very much a proof of concept only.
 
 
 *Execution*
-To run this locally: >gunicorn notify:app
+To run this locally: >gunicorn app:app
 
 #API
 
