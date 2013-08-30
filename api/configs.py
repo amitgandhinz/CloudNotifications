@@ -1,0 +1,1 @@
+queue_uri = 'https://ord.queues.api.rackspacecloud.com/v1/'
