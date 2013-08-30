@@ -56,3 +56,13 @@ Reserved Protocols
     *Workers supporting the above protocols will be provided*
     
 *We do not currently plan to support attribute based subscriptions.*
+
+#Custom Subscriber Applications
+
+Custom Subscribers can be built using the python library provided with driver based (pluggable) components.  The drivers that
+can be substituted in the application are
+
+- Processor -> This driver allows the developer to define what processing or transformation should be done on the message before it is passed on to the next module.
+- Notifier -> This driver is responsible for sending the notification to the next subsystem (eg Billing System, a Marconi Queue, etc)
+ 
+
