@@ -30,13 +30,15 @@ Subscriber Actions
 Publisher Actions
 
     GET /v1/topics # return a list of topics
-    PUT /v1/topics/{topic} # create a topic to publish to
+    PUT /v1/topics/{topic} # create/update a topic to publish to
     DELETE /v1/topics/{topic} # delete a topic
-    POST /v1/topics/{topic}/messages # publish messages to the topic
+    POST /v1/topics/{topic}/messages # publish messages to the topic. All subscribers to this topic receive all messages.
     
-    GET /v1/{topic}/subscribers # lists subscribers
-    PATCH /v1/{topic}/subscribers/{subscriber_name} # confirms a subscriber
-    DELETE /v1/{topic}/subscribers/{subscriber_name} # removes a subscriber
+    GET /v1/{topic}/subscribers # lists all subscribers to the topic
+    PATCH /v1/{topic}/subscribers/{subscriber_name} # confirms a subscriber subscribing to the topic
+    DELETE /v1/{topic}/subscribers/{subscriber_name} # removes a subscriber from the topic
+    PUT /v1/{topic}/permissions/{project_id} # allows a keystone projectid to publish to this topic
+    DELETE /v1/{topic}/permissions/{project_id} # removes a granted projectid the ability to publish to this topic
 
 
 Currently we do not support attribute based subscriptions.
