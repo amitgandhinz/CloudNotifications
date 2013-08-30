@@ -26,6 +26,7 @@ Subscriber Actions
 
     PUT /v1/topics/{topic}/subscribers/{subscriber_name} # subscribe to a topic (may require confirmation)
     DELETE /v1/topics/{topic}/subscribers/{subscriber_name} # unsubscribe from a topic
+    GET /v1/topics/{topic}/messages # get list of unseen messages for the topic
     
 Publisher Actions
 
@@ -53,6 +54,5 @@ Reserved Protocols
     
     *Subscriber Protocols are used to target different customized messages for different protocols, and is optional.*
     *Workers supporting the above protocols will be provided*
-    *TODO - How do custom application workers get the messages they want to process themselves?*
     
 *We do not currently plan to support attribute based subscriptions.*
