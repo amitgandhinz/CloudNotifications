@@ -40,5 +40,15 @@ Publisher Actions
     PUT /v1/{topic}/permissions/{project_id} # allows a keystone projectid to publish to this topic
     DELETE /v1/{topic}/permissions/{project_id} # removes a granted projectid the ability to publish to this topic
 
+Protocols
 
-Currently we do not support attribute based subscriptions.
+    Email (Subscriber who Sends an Email)
+    SMS (Subscriber who Sends a text message)
+    Marconi (Subscriber who Sends message on to a Marconi Queue)
+    HTTPS (Subscriber who Calls an HTTPS endpoint with a JSON encoded message)
+    Application (Subscriber who handles the Message their own way)
+    
+    * Subscriber Protocols are used to target different customized messages for different protocols, and is optional. *
+   
+    
+*We do not currently plan to support attribute based subscriptions.*
