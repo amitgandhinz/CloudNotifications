@@ -4,12 +4,14 @@ import json
 import requests
 
 class WorkerThread(threading.Thread):
-    """ A worker thread that takes notifications from a queue, and sends out the notification
+    """ A worker thread that takes notifications from a queue, and sends out the notification to each subscriber
 
         Ask the thread to stop by calling its join() method.
     """
     def __init__(self, notification_q, subscribers):
         super(WorkerThread, self).__init__()
+
+        print 'initializing worker'
         self.notification_q = notification_q
         self.subscribers = subscribers
         self.stoprequest = threading.Event()
@@ -25,6 +27,8 @@ class WorkerThread(threading.Thread):
                 # send out the notification
                 notification = self.notification_q.get(True, 0.05)
                 
+                print 'worker assigned to ', notification.get('body').get('default')
+            
                 # send out the notification to all subscribers
                 self.notify_email(notification, self.subscribers)
 
@@ -40,9 +44,8 @@ class WorkerThread(threading.Thread):
     def notify_email(self, notification, subscribers):
 
 
-        MailGunUri = 'https://api.mailgun.net/v2/samples.mailgun.org/messages '
-        MailGunAPI = 'https://api.mailgun.net/v2'
-        MailGunKey = 'key-6ics5m3vw3-99m-dxt85hv5mamfhm-b4'
+        MailGunAPI = 'https://api.mailgun.net/v2/gandhi.co.nz/messages'
+        MailGunKey = '<GET FROM CONFIG>'
 
         # authenticate with mailgun
 
@@ -50,17 +53,27 @@ class WorkerThread(threading.Thread):
             notification_types = subscriber.get('notification_types')
 
             for n_type in notification_types:
-                if n_type.get('type') == 'email':
+                if n_type.get('protocol') == 'email':
+                    from_address = 'Amit Gandhi <amit@example.com>'
                     to_address = n_type.get('value')
-                    body = notification.get('body')
-                    subject = notification.get('subject')
+                    body = notification.get('body').get('default')
+                    subject = notification.get('body').get('default')
 
                     print 'sending out a notification to ' + to_address
                     print subject
-                    print body
 
                     # send the notification
-                    r = requests.post(MailGunUri, data='from="Cloud Notifications" to="'+ to_address  +'" subject="' + subject + '" text="' + body + '"',  auth=('api', MailGunKey))
-        
+                    r = requests.post(MailGunAPI, 
+                            auth=('api', MailGunKey),
+                            data={
+                                "from": from_address,
+                                "to": to_address,
+                                "subject": subject,
+                                "text": body
+                            }  
+                        )
+                    print r, r.text
+
+
 
 

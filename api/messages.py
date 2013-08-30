@@ -13,22 +13,24 @@ class MessageCollectionResource:
 		token = req.get_header('X-Auth-Token')
 		
 		queue_uri = configs.queue_uri + 'queues/' + topic_name + '/messages'
-		queue_headers = {"X-Auth-Token" : token, "Content-Type" : "application/json; charset=utf-8", "Client-ID" : "CloudNotificationsPublisher"}
+		queue_headers = {"X-Auth-Token" : token, "Content-Type" : "application/json; charset=utf-8", "Client-ID" : "CloudNotificationsSubscriber"}
 		
 		r = requests.get(queue_uri, headers=queue_headers)
 
 		resp.status = r.status_code
 		resp.body = r.text
 
-	def on_put(self, req, resp, topic_name):
+	def on_post(self, req, resp, topic_name):
 		"""POSTs notifications to the topic"""
 
 		token = req.get_header('X-Auth-Token')
 		
 		queue_uri = configs.queue_uri + 'queues/' + topic_name + '/messages'
 		queue_headers = {"X-Auth-Token" : token, "Content-Type" : "application/json; charset=utf-8", "Client-ID" : "CloudNotificationsPublisher"}
-		
-		r = requests.put(queue_uri, headers=queue_headers)
+		raw_json = req.stream.read()
+		message = json.loads(raw_json, 'utf-8')
+
+		r = requests.post(queue_uri, data=json.dumps(message), headers=queue_headers)
 
 		resp.status = r.status_code
 		resp.body = r.text
