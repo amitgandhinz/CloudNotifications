@@ -40,15 +40,19 @@ Publisher Actions
     PUT /v1/{topic}/permissions/{project_id} # allows a keystone projectid to publish to this topic
     DELETE /v1/{topic}/permissions/{project_id} # removes a granted projectid the ability to publish to this topic
 
-Protocols
+Reserved Protocols
 
     Email (Subscriber who Sends an Email)
     SMS (Subscriber who Sends a text message)
     Marconi (Subscriber who Sends message on to a Marconi Queue)
     HTTPS (Subscriber who Calls an HTTPS endpoint with a JSON encoded message)
-    Application (Subscriber who handles the Message their own way)
+    Twitter (Subscriber that sends out a tweet)
+    Facebook (Posts to a Facebook wall)
     
-    * Subscriber Protocols are used to target different customized messages for different protocols, and is optional. *
-   
+    Application_{UniqueIdentifier} (Subscriber who handles the Messages their own way - must implement themselves)
+    
+    *Subscriber Protocols are used to target different customized messages for different protocols, and is optional.*
+    *Workers supporting the above protocols will be provided*
+    *TODO - How do custom application workers get the messages they want to process themselves?*
     
 *We do not currently plan to support attribute based subscriptions.*
