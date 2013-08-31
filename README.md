@@ -24,7 +24,7 @@ To run this locally: >gunicorn app:app
 
 Subscriber Actions
 
-    PUT /v1/topics/{topic}/subscribers/{subscriber_name} # subscribe to a topic (may require confirmation)
+    PUT /v1/topics/{topic}/subscribers/{subscriber_name} # subscribe to a topic (may require confirmation based on topic permissions)
     DELETE /v1/topics/{topic}/subscribers/{subscriber_name} # unsubscribe from a topic
     GET /v1/topics/{topic}/messages # get list of unseen messages for the topic
     
@@ -41,14 +41,14 @@ Publisher Actions
     PUT /v1/{topic}/permissions/{project_id} # allows a keystone projectid to publish to this topic
     DELETE /v1/{topic}/permissions/{project_id} # removes a granted projectid the ability to publish to this topic
 
-Reserved Protocols
+Subscriber Protocols
 
     Email (Subscriber who Sends an Email)
     SMS (Subscriber who Sends a text message)
     Marconi (Subscriber who Sends message on to a Marconi Queue)
-    HTTPS (Subscriber who Calls an HTTPS endpoint with a JSON encoded message)
+    URI (Subscriber who Calls an URI endpoint with a JSON encoded message)
     Twitter (Subscriber that sends out a tweet)
-    Facebook (Posts to a Facebook wall)
+    Facebook (Subscriber that Posts to a Facebook wall)
     
     Application_{UniqueIdentifier} (Subscriber who handles the Messages their own way - must implement themselves)
     
@@ -64,5 +64,13 @@ can be substituted in the application are
 
 - Processor -> This driver allows the developer to define what processing or transformation should be done on the message before it is passed on to the next module.
 - Notifier -> This driver is responsible for sending the notification to the next subsystem (eg Billing System, a Marconi Queue, etc)
+
+#Scaling Workers
+
+As load increases in a topic (lots of notifications posted), workers will need to scale out to support handling the high load of notifications.  As topics are created, workers will need to be spawned to monitor that topic to handle notifications added.
+
+- Workers autoscaled for each topic and to handle n messages per topic.
+- As workers scale out (eg n Email Workers), how do we ensure dupicate notifications are not sent?
+
  
 
